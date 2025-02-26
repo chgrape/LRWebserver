@@ -15,16 +15,17 @@ Route::get('/cancel', [TransactionController::class, 'cancel'])->name('checkout-
 //Backend routes
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'login']);
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
 //Views
-Route::get('/', function (){
-    return Inertia::render('Home');
+Route::get('/login', function (){
+    return Inertia::render('Auth/Login');
 })->name('login');
 
-Route::get('/dashboard', function(){
+Route::get('/', function(){
     return Inertia::render('Dashboard');
-})->middleware('web')->name('dashboard');
+})->middleware('auth')->name('dashboard');
 
 Route::get('/register', function (){
-    return Inertia::render("Register");
+    return Inertia::render("Auth/Register");
 })->name('register');

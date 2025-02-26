@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
@@ -38,7 +39,10 @@ class UserController extends Controller
             $request->session()->regenerate();
             Log::info("something");
 
-            return to_route('dashboard');
+            return Redirect::route('dashboard');
+        }else{
+            Log::info("something else");
+            return Redirect::route('login');
         }
 
     }
@@ -47,11 +51,13 @@ class UserController extends Controller
         return User::find($id);
     }
     
-    public function test(){
-        return to_route('dashboard');
-    }
-
-    public function logout(){
-
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return Redirect::route('dashboard');
     }
 }
